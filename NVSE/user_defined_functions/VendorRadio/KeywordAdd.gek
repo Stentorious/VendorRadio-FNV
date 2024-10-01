@@ -1,0 +1,18 @@
+int	iButton
+ref rVendor
+array_var aKeywordRef
+
+begin Function {iButton}
+	
+	if iButton < (Goo1.AuxVarGetFlt "*PVR_Flt" 1)																			; If vendor selected
+		rVendor = Goo1.AuxVarGetRef "*PVR_Add" iButton																		; Get selected vendor ref
+		aKeywordRef = GetINISection "VendorRadio" "..\KEYWORDS\VendorRadio.ini"												; Add number of Keyword refs
+		SetINIString ("VendorRadio:" + $(Ar_Size aKeywordRef)) (GetEditorID (rVendor.gbo)) "..\KEYWORDS\VendorRadio.ini"	; Add ref to Keyword INI
+		AssignKeyword (rVendor.gbo) "VendorRadio"																			; Assign Keyword to ref
+		rVendor.AuxVarErase "*VendorRadio"																					; Clear Keyword flag if ref previously removed
+		aKeywordRef = ar_Null																								; Nullify arrays
+		Goo1.AuxVarErase "*PVR_Add"																							; Erase AuxArray
+	endif
+	call (CompileScript "VendorRadio/MsgInit.gek")																			; Display vendor message box
+	
+end

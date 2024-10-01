@@ -1,0 +1,79 @@
+int stI1
+ref rRef
+
+array_var aMEBRef
+array_var aMEBName
+array_var aForE
+
+int iButton
+int iVendors
+int iMEBs
+
+string_var sMsgEx
+
+begin Function {iButton}
+		
+	iVendors = Goo1.AuxVarGetFlt "*PVR_Flt" 1
+	if iButton < iVendors													; If vendor selected
+		Goo1.AuxVarSetRef "*PVR_Ref" (Goo1.AuxVarGetRef "*PVR_Ven" iButton) ; Ref: Selected vendor
+		
+		if Goo1.AuxVarGetFlt "*PVR_INI" 1 == 1								; If express shipping enabled
+			
+			sMsgEx = "^Vendor Radio^Shipping Location:"						; Message box title and header
+			
+			if IsModLoaded "TaleOfTwoWastelands.esm"
+				aMEBRef = ar_List vMEPrimmRef1, vMENovacRef, vMEVegasRef, vMEGoodSpringsRef, vMEFreesideRef, (GFFM "TaleOfTwoWastelands.esm" "8F78"), (GFFM "TaleOfTwoWastelands.esm" "8F7B"), (GFFM "TaleOfTwoWastelands.esm" "8F7A"), (GFFM "TaleOfTwoWastelands.esm" "8F79"), (GFFM "TaleOfTwoWastelands.esm" "8F77")
+			else
+				aMEBRef = ar_List vMEPrimmRef1, vMENovacRef, vMEVegasRef, vMEGoodSpringsRef, vMEFreesideRef
+			endif
+	
+			if IsModLoaded "TaleOfTwoWastelands.esm"
+				aMEBName = ar_List "Primm", "Novac", "New Vegas Strip", "Goodsprings", "Freeside", "Paradise Falls", "Megaton", "Canterbury Commons", "Tenpenny Tower", "Rivet City"
+			else
+				aMEBName = ar_List "Primm", "Novac", "New Vegas Strip", "Goodsprings", "Freeside"
+			endif
+			
+			Goo1.AuxVarErase "*PVR_MEB"
+			foreach aForE <- aMEBRef
+				rRef = *aForE
+				if rRef.GetVariable "bDiscovered"						; If expressbox is discovered
+					iMEBs += 1
+					Goo1.AuxVarSetRef "*PVR_MEB" rRef -1
+					sMsgEx += ("|" + aMEBName[aForE["key"]])			; Add expressbox as message box option
+				endif
+			loop
+		
+			if iMEBs > 0												; If >1 discovered express boxes
+				sMsgEx += "|Cancel"										; Display cancel message
+			else														; If no discovered express boxes
+				sMsgEx += "|None Available"								; Display error message
+			endif
+
+			Goo1.AuxVarSetFlt "*PVR_Flt" iMEBs 2						; Cache discovered MEB count
+			
+			MessageBoxExAlt (begin function {int iLambda}
+				if iLambda < (Goo1.AuxVarGetFlt "*PVR_Flt" 2)			; If express box location selected
+					Goo1.AuxVarSetRef "*PVR_Ref" (Goo1.AuxVarGetRef "*PVR_MEB" iLambda) 1
+					call (CompileScript "VendorRadio/Barter.gek")		; Display barter menu
+				else													; If cancel selected
+					call (CompileScript "VendorRadio/MsgInit.gek")			; Display vendor message box
+				endif
+			end) "%z" sMsgEx
+			
+			aMEBRef = aMEBName = aForE = ar_Null
+			
+		else															; If express shipping disabled
+			call (CompileScript "VendorRadio/Barter.gek")				; Display barter menu 
+		endif
+	elseif iButton == iVendors											; If "Add Vendor" selected
+		if iVendors > 0                                                 ; If >1 discovered vendors
+			sMsgEx = "^Vendor Radio^|Add Vendor|Remove Vendor|Cancel"  ; Display remove vendor message
+		else                                                        	; If no discovered vendors
+			sMsgEx = "^Vendor Radio^|Add Vendor|Cancel"                ; Display cancel message
+		endif
+		MessageBoxExAlt (CompileScript "VendorRadio/Settings.gek") "%z" sMsgEx
+	endif
+	
+	sv_Destruct sMsgEx
+		
+end

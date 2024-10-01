@@ -1,0 +1,37 @@
+int iButton
+int iVendors
+int iActors
+ref rActor
+array_var aActorRef
+string_var sMsgEx
+
+begin Function {iButton}
+	
+	iVendors = Goo1.AuxVarGetFlt "*PVR_Flt" 1
+	if iButton == 0												; If add vendor selected
+		sMsgEx = "^Vendor Radio^"								; Message box title and header
+		Goo1.AuxVarErase "*PVR_Add"								; Array: Nearby vendors
+		foreach array_var aActorRef <- (GetActorsByProcessingLevel 0)
+			rActor = *aActorRef
+			if eval (rActor.GetMerchantContainer && rActor.IsPersistent && rActor.GetTalkedToPC && GetFormRefs (rActor.gbo) && (HasKeyword rActor "VendorRadio" == 0 || rActor.AuxVarGetFlt "*VendorRadio" == 1)); If discovered merchant NPC without "VendorRadio" keyword		
+				iActors += 1
+				Goo1.AuxVarSetRef "*PVR_Add" rActor -1			; Array: Add vendor
+				sMsgEx += ("|" + rActor.LNGetName)				; Add vendor as message box option
+			endif
+		loop
+		if iActors > 0                                        	; If >1 nearby vendors
+			sMsgEx += "|Cancel"                             	; Display cancel message
+		else                                               		; If no nearby vendors
+			sMsgEx += "|None Available"                      	; Display error message
+		endif
+		Goo1.AuxVarSetFlt "*PVR_Flt" iActors 1
+		MessageBoxExAlt (CompileScript "VendorRadio/KeywordAdd.gek") "%z" sMsgEx
+		aActorRef = ar_Null
+		sv_Destruct sMsgEx
+	elseif iVendors > 0 && iButton == 1							; If remove vendor selected 
+		MessageBoxExAlt (CompileScript "VendorRadio/KeywordRemove.gek") "%z|Cancel" (Goo1.AuxVarGetStr "*PVR_Str" 0)
+	else														; If cancel selected 
+		call (CompileScript "VendorRadio/MsgInit.gek")			; Display vendor message box
+	endif
+
+end

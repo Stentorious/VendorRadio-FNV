@@ -1,0 +1,32 @@
+int	iButton
+int iKeywords
+ref rVendor
+array_var aKeywordRef
+array_var aKeywordStr
+string_var sLastEntry
+string_var sKeyword
+
+begin Function {iButton}
+	
+	if iButton < (Goo1.AuxVarGetFlt "*PVR_Flt" 1)																	; If vendor selected
+		rVendor = Goo1.AuxVarGetRef "*PVR_Ven" iButton																; Ref: Selected vendor
+		aKeywordRef = GetINISection "VendorRadio" "..\KEYWORDS\VendorRadio.ini"										; Array: All INI enteries
+		iKeywords = (Ar_Size aKeywordRef) - 1																		; Int: INI entry count
+		sLastEntry = GetINIString ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"						; Str: Last INI entry EditorID
+		RemoveINIKey ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"									; Remove last INI entry
+		if rVendor.gbo != EditorIDToFormID (sLastEntry)																; If selected vendor != last entry
+			foreach aKeywordStr <- aKeywordRef
+				sKeyword = *aKeywordStr																				; String: Entry EditorID
+				if rVendor.gbo == EditorIDToFormID (sKeyword)														; If selected vendor = entry EditorID
+					SetINIString ("VendorRadio:" + $(aKeywordStr["key"])) (sLastEntry) "..\KEYWORDS\VendorRadio.ini"; Replace removed entry with last entry
+					break
+				endif
+			loop
+		endif
+		rVendor.AuxVarSetFlt "*VendorRadio" 1
+		aKeywordRef = aKeywordStr = ar_Null
+		sv_Destruct sLastEntry sKeyword
+	endif
+	call (CompileScript "VendorRadio/MsgInit.gek")																	; Display vendor message box
+	
+end

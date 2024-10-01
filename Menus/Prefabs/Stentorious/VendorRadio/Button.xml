@@ -1,0 +1,26 @@
+<hotrect name="MM_ButtonVend">
+	<include src="text_box.xml"/>
+	<clicksound> UIPipboySelect </clicksound>
+	<_y>
+		<copy src="sibling(MM_ButtonA)" trait="_y"/>
+		<add>
+			<copy src="sibling(MM_ButtonA)" trait="height"/>
+			<onlyif src="sibling(MM_ButtonA)" trait="visible"/>
+		</add>
+	</_y>
+	<_horbuf> 20 </_horbuf>
+	<_verbuf> 15 </_verbuf>
+	<justify> &right; </justify>
+	<_line_alpha> <copy> 127 </copy> <add> <copy> 128 </copy> <onlyif src="me" trait="target"/> </add> </_line_alpha>
+	
+	<visible> <copy src="MM_Tabline" trait="_CurrentTab" /> <eq> 4 </eq> </visible>
+
+	<string> Vendor Radio </string>
+
+	<_xbox_button> &xbuttonx; </_xbox_button>
+	<_PCButtonText> &-sPCMenuHintQ; </_PCButtonText>
+	<depth> 3 </depth>
+
+	<_VUI+OutlineIntensity> <copy src="parent" trait="_VUI+MapButton" /> </_VUI+OutlineIntensity>
+
+</hotrect>

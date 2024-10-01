@@ -1,0 +1,19 @@
+int iINIMode
+ref rVender
+
+begin Function {}
+	
+	iINIMode = Goo1.AuxVarGetFlt "*PVR_INI" 1										; Get vendor mode
+	Goo1.AuxVarSetFlt "*PVR_Flt" 1		 											; Set barter flag
+	if iINIMode != 3																; If direct buy & sell disabled
+		if iINIMode != 0															; If browse only disabled
+			ListAddForm RepairNVHeavyRiveter Caps001								; Add caps
+		endif
+		ListAddArray RepairNVHeavyRiveter (player.GetEquippedItems)					; Add equipped items
+		player.RemoveAllItemsShowOff (0b11) -1 vMEControlBox RepairNVHeavyRiveter	; Temporarily store player inventory so they can't sell items (Keep caps and equipped items)
+		CallAfterFrames 1 ({} => ClearMessageQueue) 1								; Clear corner message queue
+	endif
+	rVender = Goo1.AuxVarGetRef "*PVR_Ref"											; Show selected npc ref
+	rVender.ShowBarterMenu	(Goo1.AuxVarGetFlt "*PVR_INI" 0)						; Show selected npc barter menu
+	
+end
