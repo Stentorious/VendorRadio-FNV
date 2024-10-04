@@ -1,28 +1,29 @@
 int iVendors
-ref rRef
-array_var aVendorRef
-array_var aKeywordRef
-string_var sMsgEx
+ref rVendor
+array_var aVendorRefs
+array_var aForE
+string_var sMsgBox
 
 begin Function {}
-	
-	sMsgEx = "^Vendor Radio^"																	; Message box title and header
+
+	; Build message box displaying all available vendors
+	sMsgBox = "^Vendor Radio^"
 	Goo1.AuxVarErase "*PVR_Ven"
-	foreach array_var aKeywordRef <- (GetKeywordForms "VendorRadio")							; Array: All forms with "VendorRadio" keyword
-		rRef = *aKeywordRef
-		aVendorRef = GetFormRefs rRef															; Get all actor refs of base form
-		rRef = aVendorRef[0]																	; Get only first actor ref (Prevent duplicates)
-		if eval (rRef.GetTalkedToPC && rRef.GetDead == 0 && rRef.AuxVarGetFlt "*VendorRadio" != 1)		; If vendor is discovered, alive, not removed
+	foreach aForE <- (GetKeywordForms "VendorRadio")
+		rVendor = *aForE
+		aVendorRefs = GetFormRefs rVendor
+		rVendor = aVendorRefs[0]
+		if eval (rVendor.GetTalkedToPC && rVendor.GetDead == 0 && rVendor.AuxVarGetFlt "*VendorRadio" != 1)
 			iVendors += 1
-			Goo1.AuxVarSetRef "*PVR_Ven" rRef -1												; Array: Add vendor
-			sMsgEx += ("|" + rRef.LNGetName)													; Add vendor as message box option
-		endif 
+			Goo1.AuxVarSetRef "*PVR_Ven" rVendor -1
+			sMsgBox += ("|" + rVendor.LNGetName)
+		endif
 	loop
 	Goo1.AuxVarSetFlt "*PVR_Flt" iVendors 1
-	Goo1.AuxVarSetStr "*PVR_Str" (sMsgEx) 0
-	MessageBoxExAlt (CompileScript "VendorRadio/MsgVendor.gek") "%z|Settings|Cancel" sMsgEx		; Display settings + cancel message	
-	
-	aVendorRef = aKeywordRef = ar_Null
-	sv_Destruct sMsgEx
-	
+	Goo1.AuxVarSetStr "*PVR_Str" (sMsgBox) 0
+	MessageBoxExAlt (CompileScript "VendorRadio\MsgVendor.gek") "%z|Settings|Cancel" sMsgBox
+
+	aVendorRefs = aForE = Ar_Null
+	Sv_Destruct sMsgBox
+
 end

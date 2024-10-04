@@ -1,32 +1,37 @@
 int	iButton
+
 int iKeywords
 ref rVendor
-array_var aKeywordRef
-array_var aKeywordStr
+array_var aKeywordRefs
+array_var aForE
 string_var sLastEntry
 string_var sKeyword
 
 begin Function {iButton}
-	
-	if iButton < (Goo1.AuxVarGetFlt "*PVR_Flt" 1)																	; If vendor selected
-		rVendor = Goo1.AuxVarGetRef "*PVR_Ven" iButton																; Ref: Selected vendor
-		aKeywordRef = GetINISection "VendorRadio" "..\KEYWORDS\VendorRadio.ini"										; Array: All INI enteries
-		iKeywords = (Ar_Size aKeywordRef) - 1																		; Int: INI entry count
-		sLastEntry = GetINIString ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"						; Str: Last INI entry EditorID
-		RemoveINIKey ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"									; Remove last INI entry
-		if rVendor.gbo != EditorIDToFormID (sLastEntry)																; If selected vendor != last entry
-			foreach aKeywordStr <- aKeywordRef
-				sKeyword = *aKeywordStr																				; String: Entry EditorID
-				if rVendor.gbo == EditorIDToFormID (sKeyword)														; If selected vendor = entry EditorID
-					SetINIString ("VendorRadio:" + $(aKeywordStr["key"])) (sLastEntry) "..\KEYWORDS\VendorRadio.ini"; Replace removed entry with last entry
+
+	; Remove keyword from ini an add flag to vendor ref
+	if iButton < (Goo1.AuxVarGetFlt "*PVR_Flt" 1)
+		rVendor = Goo1.AuxVarGetRef "*PVR_Ven" iButton
+		aKeywordRefs = GetINISection "VendorRadio" "..\KEYWORDS\VendorRadio.ini"
+		iKeywords = (Ar_Size aKeywordRefs) - 1
+		sLastEntry = GetINIString ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"
+		RemoveINIKey ("VendorRadio:" + $iKeywords) "..\KEYWORDS\VendorRadio.ini"
+		if rVendor.GBO != EditorIDToFormID (sLastEntry)
+			foreach aForE <- aKeywordRefs
+				sKeyword = *aForE
+				if rVendor.GBO == EditorIDToFormID (sKeyword)
+					SetINIString ("VendorRadio:" + $(aForE["key"])) (sLastEntry) "..\KEYWORDS\VendorRadio.ini"
 					break
 				endif
 			loop
 		endif
 		rVendor.AuxVarSetFlt "*VendorRadio" 1
-		aKeywordRef = aKeywordStr = ar_Null
-		sv_Destruct sLastEntry sKeyword
+
+		aKeywordRefs = aForE = Ar_Null
+		Sv_Destruct sLastEntry sKeyword
+
 	endif
-	call (CompileScript "VendorRadio/MsgInit.gek")																	; Display vendor message box
-	
+
+	Call (CompileScript "VendorRadio\MsgInit.gek")
+
 end

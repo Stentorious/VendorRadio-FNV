@@ -1,5 +1,6 @@
 ; Vendor Radio 1.8 - Stentorious
 
+; On game restart
 if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 	Goo1.AuxVarSetFlt "*PVR_Init" 1
 
@@ -21,49 +22,46 @@ if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest lStewieAl's Tweaks."
 		return
 	endif
+	if GetPluginVersion "UI Organizer Plugin" < 230
+		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest User Interface Organizer plugin."
+		return
+	endif
 	if eval !FileExists "nvse\plugins\scripts\gr_0KEYWORDS.txt"
 		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest KEYWORDS."
 		return
 	endif
 
-	Goo1.AuxVarSetFlt "*PVR_INI" (Floor (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "VendorRadio.ini"))) - 1) * -100)) 0 	; Set vendor price multipler
-	Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "VendorRadio.ini"))) 1 							; Set vendor mode
-
-	if eval IsModLoaded "DarNifiedUINV.esp"
-		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect" "data\menus\prefabs\Stentorious\VendorRadioButtonDarn.xml"
-	else
-		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect" "data\menus\prefabs\Stentorious\VendorRadioButton.xml"
-	endif
+	Goo1.AuxVarSetFlt "*PVR_INI" (Floor (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "VendorRadio.ini"))) - 1) * -100)) 0
+	Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "VendorRadio.ini"))) 1
 
 	; ySI Addon (Buttons)
-	if GetINIFloat "ySI:bButtonIcons" "PipBoyUITweaks.ini" == 1
-		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data/menus/prefabs/Stentorious/PipBoyUITweaks/ySIButtonIcon.xml"					; Inject icon xml (Stimpak)
-		SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface/icons/Misc_Utility.dds"
+	if eval GetINIFloat "ySI:bButtonIcons" "PipBoyUITweaks.ini" == 1 && FileExists "menus\ySI\ySI.xml"
+		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
+		SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
 	endif
 
 	; Detect button press
-	SetOnMenuClickEventHandler (begin function {int stL1, int stL2, string_var stL3}
-		call (CompileScript "VendorRadio/MsgInit.gek")
-	end) 1 "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend"
+	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "VendorRadio\MsgInit.gek")) 1 "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend"
 
 	; Detect "Q" key press
-	SetOnKeyDownEventHandler (begin function {int stL1}
+	SetOnKeyDownEventHandler (begin function {int iKeyID}
 		if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
-			call (CompileScript "VendorRadio/MsgInit.gek")
+			Call (CompileScript "VendorRadio\MsgInit.gek")
 		endif
 	end) 1 16
 
 	; Detect gamepad "X" button press
-	SetEventHandler "OnButtonDown:16384" (begin function {int stL1}
+	SetEventHandler "OnButtonDown:16384" (begin function {int iKeyID}
 		if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
-			call (CompileScript "VendorRadio/MsgInit.gek")
+			Call (CompileScript "VendorRadio\MsgInit.gek")
 		endif
 	end)
 
-	SetOnMenuCloseEventHandler (CompileScript "VendorRadio/Purchase.gek") 1 1053 ; Return player inventory and ship purchased items
+	SetOnMenuCloseEventHandler (CompileScript "VendorRadio\Purchase.gek") 1 1053 ; Return player inventory and ship purchased items
 
 endif
 
+; On game load
 Goo1.AuxVarErase "*PVR_Str"
 Goo1.AuxVarErase "*PVR_Add"
 Goo1.AuxVarErase "*PVR_MEB"
