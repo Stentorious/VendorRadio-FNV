@@ -14,7 +14,7 @@ begin Function {iButton}
 
 	; Vendor selected
 	if iButton < iVendors
-		Goo1.AuxVarSetRef "*PVR_Ref" (Goo1.AuxVarGetRef "*PVR_Ven" iButton)
+		Goo1.AuxVarSetRef "*PVR_Vend" (Goo1.AuxVarGetRef "*PVR_Ven" iButton)
 
 		; Shipping enabled
 		if Goo1.AuxVarGetFlt "*PVR_INI" 1 == 1
@@ -31,11 +31,13 @@ begin Function {iButton}
 
 			; Build message box displaying all available express boxes
 			Goo1.AuxVarErase "*PVR_MEB"
+			Goo1.AuxVarErase "*PVR_MEB_Str"
 			foreach aForE <- aMEBRefs
 				rExpBox = *aForE
 				if rExpBox.GetVariable "bDiscovered"
 					iExpBoxes += 1
 					Goo1.AuxVarSetRef "*PVR_MEB" rExpBox -1
+					Goo1.AuxVarSetStr "*PVR_MEB_Str" (aMEBNames[aForE["key"]]) -1
 					sMsgBox += ("|" + aMEBNames[aForE["key"]])
 				endif
 			loop

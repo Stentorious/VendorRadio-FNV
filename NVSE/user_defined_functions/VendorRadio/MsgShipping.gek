@@ -4,12 +4,18 @@ begin Function {iButton}
 
 	; Cache express box location and open vendor menu
 	if iButton < (Goo1.AuxVarGetFlt "*PVR_Flt" 2)
-		Goo1.AuxVarSetRef "*PVR_Ref" (Goo1.AuxVarGetRef "*PVR_MEB" iButton) 1
+		Goo1.AuxVarSetRef "*PVR_Vend" (Goo1.AuxVarGetRef "*PVR_MEB" iButton) 1
+		Goo1.AuxVarSetStr "*PVR_Vend" (Goo1.AuxVarGetStr "*PVR_MEB_Str" iButton) 2
+
 		Call (CompileScript "VendorRadio\Barter.gek")
 
 	; Return to main menu
 	else
 		Call (CompileScript "VendorRadio\MsgInit.gek")
 	endif
+
+	; Erase aux
+	Goo1.AuxVarErase "*PVR_MEB"
+	Goo1.AuxVarErase "*PVR_MEB_Str"
 
 end
