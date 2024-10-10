@@ -4,7 +4,7 @@ ref rVendor
 begin Function {}
 
 	iVendorMode = Goo1.AuxVarGetFlt "*PVR_INI" 1
-	Goo1.AuxVarSetFlt "*PVR_Flt" 1
+	Goo1.AuxVarSetFlt "*PVR_Flt" 1 0
 
 	; Hide player items while in vendor menu
 	if iVendorMode != 3
@@ -17,7 +17,7 @@ begin Function {}
 	endif
 
 	; Show barter menu
-	rVendor = Goo1.AuxVarGetRef "*PVR_Ref"
+	rVendor = Goo1.AuxVarGetRef "*PVR_Vend"
 	rVendor.ShowBarterMenu (Goo1.AuxVarGetFlt "*PVR_INI" 0)
 
 end

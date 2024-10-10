@@ -13,7 +13,7 @@ begin Function {}
 		rVendor = *aForE
 		aVendorRefs = GetFormRefs rVendor
 		rVendor = aVendorRefs[0]
-		if eval (rVendor.GetTalkedToPC && rVendor.GetDead == 0 && rVendor.AuxVarGetFlt "*VendorRadio" != 1)
+		if eval rVendor.GetTalkedToPC && rVendor.GetDead == 0 && rVendor.AuxVarGetFlt "*VendorRadio" != 1
 			iVendors += 1
 			Goo1.AuxVarSetRef "*PVR_Ven" rVendor -1
 			sMsgBox += ("|" + rVendor.LNGetName)

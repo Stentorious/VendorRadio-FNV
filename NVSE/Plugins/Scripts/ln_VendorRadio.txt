@@ -1,4 +1,4 @@
-; Vendor Radio 1.8 - Stentorious
+; Vendor Radio 1.9 - Stentorious
 
 ; On game restart
 if Goo1.AuxVarGetFlt "*PVR_Init" != 1
@@ -57,7 +57,8 @@ if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 		endif
 	end)
 
-	SetOnMenuCloseEventHandler (CompileScript "VendorRadio\Purchase.gek") 1 1053 ; Return player inventory and ship purchased items
+	; Return player inventory and ship purchased items
+	SetOnMenuCloseEventHandler (CompileScript "VendorRadio\Purchase.gek") 1 1053
 
 endif
 
