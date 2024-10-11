@@ -50,7 +50,7 @@ begin Function {iMenuID}
 				ClearMessageQueue
 				if Goo1.AuxVarGetFlt "*PVR_INI" 1 == 1 && Goo1.AuxVarGetFlt "*PVR_Flt" 1 == 1
 					ref rTemp = (Goo1.AuxVarGetRef "*PVR_Vend" 1)
-					MessageExAlt 4 "Interface\Icons\message icons\glow_message_giftbox.dds|Shipping items to the %z %n" (Goo1.AuxVarGetStr "*PVR_Vend" 2) rTemp
+					MessageExAlt 4 "Interface\Icons\message icons\glow_message_giftbox.dds|Shipping items to the %z %n." (Goo1.AuxVarGetStr "*PVR_Vend" 2) rTemp
 				endif
 			end) 1
 
