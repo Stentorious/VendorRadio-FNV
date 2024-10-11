@@ -1,5 +1,6 @@
 int iVendorMode
 ref rVendor
+ref rPipBoy
 
 begin Function {}
 
@@ -8,6 +9,9 @@ begin Function {}
 
 	; Hide player items while in vendor menu
 	if iVendorMode != 3
+		if eval IsFormValid (rPipBoy = Player.GetEqObj 6)
+			ListAddForm RepairNVHeavyRiveter rPipBoy
+		endif
 		if iVendorMode != 0
 			ListAddForm RepairNVHeavyRiveter Caps001
 		endif
