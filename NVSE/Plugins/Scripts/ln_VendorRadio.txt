@@ -31,7 +31,7 @@ if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 		return
 	endif
 
-	Goo1.AuxVarSetFlt "*PVR_INI" (Floor (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "VendorRadio.ini"))) - 1) * -100)) 0
+	Goo1.AuxVarSetFlt "*PVR_INI" (Ceil (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "VendorRadio.ini"))) - 1) * -100)) 0
 	Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "VendorRadio.ini"))) 1
 
 	; ySI Addon (Buttons)
