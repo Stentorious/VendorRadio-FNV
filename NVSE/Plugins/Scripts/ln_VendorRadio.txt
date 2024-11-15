@@ -1,4 +1,4 @@
-; Vendor Radio 1.9 - Stentorious
+; Vendor Radio - Stentorious
 
 ; On game restart
 if Goo1.AuxVarGetFlt "*PVR_Init" != 1
