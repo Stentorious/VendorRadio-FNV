@@ -1,4 +1,6 @@
 Stentorious\VendorRadio\Button.xml::MapMenu::MM_ButtonRect
 !darnui
+True
 Stentorious\VendorRadio\ButtonDarn.xml::MapMenu::MM_ButtonRect
-#darnui
+darnui
+True
