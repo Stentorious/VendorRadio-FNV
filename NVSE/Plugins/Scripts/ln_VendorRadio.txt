@@ -35,7 +35,7 @@ if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 	Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "Stentorious\VendorRadio.ini"))) 1
 
 	; ySI Addon (Buttons)
-	if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && FileExists "menus\ySI\ySI.xml"
+	if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"
 		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
 		SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
 	endif
