@@ -1,6 +1,6 @@
 # Vendor Radio
-<p align="center">
-    <img height="500px" src="https://staticdelivery.nexusmods.com/mods/130/images/85305/85305-1709683378-1299051179.png">
+<p align="left">
+    <img height="400px" src="https://staticdelivery.nexusmods.com/mods/130/images/85305/85305-1709683378-1299051179.png">
 </p>
 
 ## Overview
