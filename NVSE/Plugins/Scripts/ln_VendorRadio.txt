@@ -37,6 +37,8 @@ if Goo1.AuxVarGetFlt "*PVR_Init" != 1
 	; ySI Addon (Buttons)
 	if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"
 		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
+		SetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_ySIButton" 1
+		ModUIFloat "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_horbuf" (GetUIFloatAlt "HUDMainMenu\_PUI+ySIWidth" + 8)
 		SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
 	endif
 
