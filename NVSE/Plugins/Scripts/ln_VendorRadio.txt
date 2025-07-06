@@ -1,72 +1,71 @@
 ; Vendor Radio - Stentorious
 
-; On game restart
-if Goo1.AuxVarGetFlt "*PVR_Init" != 1
-	Goo1.AuxVarSetFlt "*PVR_Init" 1
-
-	; Check for requirements
-	if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 2
-	else
-	   MessageBoxEx "Vendor Radio missing requirement!%rInstall xNVSE 6.3.3+."
-	   return
-	endif
-	if GetPluginVersion "JohnnyGuitarNVSE" < 360
-		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
-		return
-	endif
-	if GetPluginVersion "ShowOffNVSE Plugin" < 165
-		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest ShowOff NVSE plugin."
-		return
-	endif
-	if GetPluginVersion "lStewieAl's Tweaks" < 905
-		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest lStewieAl's Tweaks."
-		return
-	endif
-	if GetPluginVersion "UI Organizer Plugin" < 230
-		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest User Interface Organizer plugin."
-		return
-	endif
-	if eval !FileExists "nvse\plugins\scripts\gr_0KEYWORDS.txt"
-		MessageBoxEx "Vendor Radio missing requirement!%rInstall latest KEYWORDS."
-		return
-	endif
-
-	Goo1.AuxVarSetFlt "*PVR_INI" (Ceil (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "Stentorious\VendorRadio.ini"))) - 1) * -100)) 0
-	Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "Stentorious\VendorRadio.ini"))) 1
-
-	; ySI Addon (Buttons)
-	if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"
-		InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
-		SetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_ySIButton" 1
-		ModUIFloat "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_horbuf" (GetUIFloatAlt "HUDMainMenu\_PUI+ySIWidth" + 8)
-		SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
-	endif
-
-	; Detect button press
-	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "VendorRadio\MsgInit.gek")) 1 "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend"
-
-	; Detect "Q" key press
-	SetOnKeyDownEventHandler (begin function {int iKeyID}
-		if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
-			Call (CompileScript "VendorRadio\MsgInit.gek")
-		endif
-	end) 1 16
-
-	; Detect gamepad "X" button press
-	SetEventHandler "OnButtonDown:16384" (begin function {int iKeyID}
-		if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
-			Call (CompileScript "VendorRadio\MsgInit.gek")
-		endif
-	end)
-
-	; Return player inventory and ship purchased items
-	SetOnMenuCloseEventHandler (CompileScript "VendorRadio\Purchase.gek") 1 1053
-
-endif
-
 ; On game load
 Goo1.AuxVarErase "*PVR_Str"
 Goo1.AuxVarErase "*PVR_Add"
 Goo1.AuxVarErase "*PVR_MEB"
 Goo1.AuxVarErase "*PVR_Ven"
 Goo1.AuxVarSetFlt "*PVR_Flt" 0 0
+
+; On game restart
+if eval Goo1.AuxVarGetFlt "*PVR_Init"
+	return
+endif
+Goo1.AuxVarSetFlt "*PVR_Init" 1
+
+; Check for requirements
+if eval GetNVSEVersion < 6 || (GetNVSEVersion == 6 && GetNVSERevision < 4)
+   MessageBoxEx "Vendor Radio missing requirement!%rInstall xNVSE 6.4.0+."
+   return
+endif
+if GetPluginVersion "JohnnyGuitarNVSE" < 360
+	MessageBoxEx "Vendor Radio missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+	return
+endif
+if GetPluginVersion "ShowOffNVSE Plugin" < 165
+	MessageBoxEx "Vendor Radio missing requirement!%rInstall latest ShowOff NVSE plugin."
+	return
+endif
+if GetPluginVersion "lStewieAl's Tweaks" < 905
+	MessageBoxEx "Vendor Radio missing requirement!%rInstall latest lStewieAl's Tweaks."
+	return
+endif
+if GetPluginVersion "UI Organizer Plugin" < 230
+	MessageBoxEx "Vendor Radio missing requirement!%rInstall latest User Interface Organizer plugin."
+	return
+endif
+if eval !FileExists "nvse\plugins\scripts\gr_0KEYWORDS.txt"
+	MessageBoxEx "Vendor Radio missing requirement!%rInstall latest KEYWORDS."
+	return
+endif
+
+Goo1.AuxVarSetFlt "*PVR_INI" (Ceil (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "Stentorious\VendorRadio.ini"))) - 1) * -100)) 0
+Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "Stentorious\VendorRadio.ini"))) 1
+
+; ySI Addon (Buttons)
+if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"
+	InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
+	SetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_ySIButton" 1
+	ModUIFloat "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_horbuf" (GetUIFloatAlt "HUDMainMenu\_PUI+ySIWidth" + 8)
+	SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
+endif
+
+; Detect button press
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "VendorRadio\MsgInit.gek")) 1 "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend"
+
+; Detect "Q" key press
+SetOnKeyDownEventHandler (begin function {int iKeyID}
+	if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
+		Call (CompileScript "VendorRadio\MsgInit.gek")
+	endif
+end) 1 16
+
+; Detect gamepad "X" button press
+SetEventHandler "OnButtonDown:16384" (begin function {int iKeyID}
+	if eval (GetActiveMenuMode == 1023 && GetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_Tabline\_CurrentTab" == 4)
+		Call (CompileScript "VendorRadio\MsgInit.gek")
+	endif
+end)
+
+; Return player inventory and ship purchased items
+SetOnMenuCloseEventHandler (CompileScript "VendorRadio\Purchase.gek") 1 1053

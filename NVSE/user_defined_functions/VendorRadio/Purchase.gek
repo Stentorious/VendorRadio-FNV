@@ -10,52 +10,54 @@ begin Function {iMenuID}
 
 	; Player purchased items
 	if eval Goo1.AuxVarGetFlt "*PVR_Flt" 0 == 1 && (iMenuMode == 1023 || iMenuMode == 0)
-
-		iVendorMode = Goo1.AuxVarGetFlt "*PVR_INI" 1
-		if iVendorMode == 1
-
-			; Enabled item pick up
-			if vMojaveExpressControl.bSystemActive == 1
-				vMojaveExpressControl.bSystemActive = 2
-			endif
-			if eval IsModLoaded "TaleOfTwoWastelands.esm"
-				rMEB = GFFM "TaleOfTwoWastelands.esm" "8F72"
-				if GetVariable "bSystemActive" rMEB == 1
-					SetVariable "bSystemActive" 2 rMEB
-				endif
-			endif
-
-			; Move purchased items to express box
-			rMEB = Goo1.AuxVarGetRef "*PVR_Vend" 1
-			Goo1.AuxVarSetFlt "*PVR_Flt" (rMEB.GetContainerInventoryCount) 1
-			Player.RemoveAllItemsShowOff (0b11) -1 rMEB RepairNVHeavyRiveter
-
-			; Set items purchased flag
-			if rMEB.GetContainerInventoryCount > Goo1.AuxVarGetFlt "*PVR_Flt" 1
-				Goo1.AuxVarSetFlt "*PVR_Flt" 1 1
-			else
-				Goo1.AuxVarSetFlt "*PVR_Flt" 0 1
-			endif
-
-		endif
-		ListClear RepairNVHeavyRiveter
-
-		if iVendorMode != 3
-
-			; Return items to player
-			vMEControlBox.RemoveAllItems Player 1 1
-
-			; Display shipping message
-			CallAfterFrames 0 (begin function {}
-				ClearMessageQueue
-				if Goo1.AuxVarGetFlt "*PVR_INI" 1 == 1 && Goo1.AuxVarGetFlt "*PVR_Flt" 1 == 1
-					ref rTemp = (Goo1.AuxVarGetRef "*PVR_Vend" 1)
-					MessageExAlt 4 "Interface\Icons\message icons\glow_message_giftbox.dds|Shipping items to the %z %n." (Goo1.AuxVarGetStr "*PVR_Vend" 2) rTemp
-				endif
-			end) 1
-
-		endif
-		Goo1.AuxVarSetFlt "*PVR_Flt" 0
+	else
+		return
 	endif
+
+	iVendorMode = Goo1.AuxVarGetFlt "*PVR_INI" 1
+	if iVendorMode == 1
+
+		; Enabled item pick up
+		if vMojaveExpressControl.bSystemActive == 1
+			vMojaveExpressControl.bSystemActive = 2
+		endif
+		if eval IsModLoaded "TaleOfTwoWastelands.esm"
+			rMEB = GFFM "TaleOfTwoWastelands.esm" "8F72"
+			if GetVariable "bSystemActive" rMEB == 1
+				SetVariable "bSystemActive" 2 rMEB
+			endif
+		endif
+
+		; Move purchased items to express box
+		rMEB = Goo1.AuxVarGetRef "*PVR_Vend" 1
+		Goo1.AuxVarSetFlt "*PVR_Flt" (rMEB.GetContainerInventoryCount) 1
+		Player.RemoveAllItemsShowOff (0b11) -1 rMEB RepairNVHeavyRiveter
+
+		; Set items purchased flag
+		if rMEB.GetContainerInventoryCount > Goo1.AuxVarGetFlt "*PVR_Flt" 1
+			Goo1.AuxVarSetFlt "*PVR_Flt" 1 1
+		else
+			Goo1.AuxVarSetFlt "*PVR_Flt" 0 1
+		endif
+
+	endif
+	ListClear RepairNVHeavyRiveter
+
+	if iVendorMode != 3
+
+		; Return items to player
+		vMEControlBox.RemoveAllItems Player 1 1
+
+		; Display shipping message
+		CallAfterFrames 0 (begin function {}
+			ClearMessageQueue
+			if Goo1.AuxVarGetFlt "*PVR_INI" 1 == 1 && Goo1.AuxVarGetFlt "*PVR_Flt" 1 == 1
+				ref rTemp = (Goo1.AuxVarGetRef "*PVR_Vend" 1)
+				MessageExAlt 4 "Interface\Icons\message icons\glow_message_giftbox.dds|Shipping items to the %z %n." (Goo1.AuxVarGetStr "*PVR_Vend" 2) rTemp
+			endif
+		end) 1
+
+	endif
+	Goo1.AuxVarSetFlt "*PVR_Flt" 0
 
 end
