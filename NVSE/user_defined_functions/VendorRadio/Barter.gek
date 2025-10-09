@@ -22,6 +22,6 @@ begin Function {}
 
 	; Show barter menu
 	rVendor = Goo1.AuxVarGetRef "*PVR_Vend"
-	rVendor.ShowBarterMenu (Goo1.AuxVarGetFlt "*PVR_INI" 0)
+	rVendor.ShowBarterMenu (Flr ((((Goo1.AuxVarGetFlt "*PVR_INI" 0) - 1) * -100) + 0.5))
 
 end

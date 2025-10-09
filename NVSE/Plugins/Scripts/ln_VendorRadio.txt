@@ -39,8 +39,10 @@ if eval !FileExists "nvse\plugins\scripts\gr_0KEYWORDS.txt"
 	return
 endif
 
-Goo1.AuxVarSetFlt "*PVR_INI" (Ceil (((GetMaxOf 0.5 (GetMinOf 2 (GetINIFloat "General:fPriceMult" "Stentorious\VendorRadio.ini"))) - 1) * -100)) 0
-Goo1.AuxVarSetFlt "*PVR_INI" (GetMaxOf 0 (GetMinOf 3 (GetINIFloat "General:iVendorMode" "Stentorious\VendorRadio.ini"))) 1
+; Load INI settings
+Goo1.AuxVarSetFlt "*PVR_INI" (Clamp (GetINIFloat_Cached "General:fPriceMultiplier" "Stentorious\VendorRadio.ini" 1.5) 0.5 2) 0
+Goo1.AuxVarSetFlt "*PVR_INI" (Clamp (GetINIFloat_Cached "General:iVendorMode" "Stentorious\VendorRadio.ini" 1) 0 3) 1
+CloseFileSO "Stentorious\PipBoyModVendor.ini" 0
 
 ; ySI Addon (Buttons)
 if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"

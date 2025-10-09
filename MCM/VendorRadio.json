@@ -1,0 +1,50 @@
+{
+	"modName": "VendorRadio",
+	"displayName": "$modDisplayName",
+	"description": "$modDescription",
+	"saveFile": "Stentorious/VendorRadio.ini",
+	"minMCMVersion": 1.00,
+	"minModVersion": 1.00,
+	"requirements": [
+		{ "type": "file", "file": "NVSE/plugins/scripts/ln_VendorRadio.txt" }
+	],
+	"submenus": {
+		"0": {
+			"listTitle": "$modDisplayName",
+			"pageTitle": "$modDisplayName",
+			"active": 1,
+			"columns": 1,
+			"enable": 1,
+			"options": {
+				"1": {
+					"title": "$General",
+					"enable": 1,
+					"type": 0
+				},
+				"2": {
+					"title": "$VendorMode",
+					"type": 1,
+					"enable": 1,
+					"mouse": "$VendorModeMouse",
+					"vars": [ { "form": "Goo1", "auxVar": "*PVR_INI", "key": 1, "configINI": "General:iVendorMode", "default": 1 } ],
+					"strings": [ "$BrowseOnly", "$ExpressShipping", "$DirectBuy", "$DirectBuySell" ]
+				},
+				"3": {
+					"title": "$PriceMultiplier",
+					"type": 2.5,
+					"enable": 1,
+					"suffix": "x",
+					"mouse": "$PriceMultiplierMouse",
+					"vars": [ { "form": "Goo1", "auxVar": "*PVR_INI", "key": 0, "configINI": "General:fPriceMultiplier", "default": 1.5 } ],
+					"scale": {
+						"valueDecimal": 1,
+						"valueIncrement": 0.1,
+						"valueMin": 0.5,
+						"valueMax": 2,
+						"suffix": "x"
+					}
+				}
+			}
+		}
+	}
+}
