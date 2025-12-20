@@ -42,15 +42,7 @@ endif
 ; Load INI settings
 Goo1.AuxVarSetFlt "*PVR_INI" (Clamp (GetINIFloat_Cached "General:fPriceMultiplier" "Stentorious\VendorRadio.ini" 1.5) 0.5 2) 0
 Goo1.AuxVarSetFlt "*PVR_INI" (Clamp (GetINIFloat_Cached "General:iVendorMode" "Stentorious\VendorRadio.ini" 1) 0 3) 1
-CloseFileSO "Stentorious\PipBoyModVendor.ini" 0
-
-; ySI Addon (Buttons)
-if eval GetINIFloat "ySI:bButtonIcons" "Stentorious\PipBoyUITweaks.ini" && GetPluginVersion "yUI" >= 140 && FileExists "menus\ySI\ySI.xml"
-	InjectUIXML "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend" "data\menus\prefabs\Stentorious\PipBoyUITweaks\ySIButtonIcon.xml"
-	SetUIFloatAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_ySIButton" 1
-	ModUIFloat "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\_horbuf" (GetUIFloatAlt "HUDMainMenu\_PUI+ySIWidth" + 8)
-	SetUIStringAlt "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend\ySIImage\filename" "interface\icons\Misc_Utility.dds"
-endif
+CloseFileSO "Stentorious\VendorRadio.ini" 0
 
 ; Detect button press
 SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "VendorRadio\MsgInit.gek")) 1 "MapMenu\GLOW_BRANCH\MM_MainRect\MM_ButtonRect\MM_ButtonVend"
