@@ -18,7 +18,7 @@ begin Function {iButton}
 		Goo1.AuxVarErase "*PVR_Add"
 		foreach aForE <- (GetActorsByProcessingLevel 0)
 			rActor = *aForE
-			if eval rActor.GetMerchantContainer && rActor.IsPersistent && rActor.GetTalkedToPC && GetFormRefs (rActor.GBO) && (HasKeyword rActor "VendorRadio" == 0 || rActor.AuxVarGetFlt "*VendorRadio" == 1)
+			if eval rActor.GetMerchantContainer && rActor.IsPersistent && rActor.GetTalkedToPC && GetFormRefs (rActor.GBO) 1 && (HasKeyword rActor "VendorRadio" == 0 || rActor.AuxVarGetFlt "*VendorRadio" == 1)
 				Goo1.AuxVarSetRef "*PVR_Add" rActor -1
 				sMsgBox += ("|" + rActor.LNGetName)
 				iActors += 1

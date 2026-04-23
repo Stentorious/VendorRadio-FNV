@@ -11,7 +11,7 @@ begin Function {}
 	Goo1.AuxVarErase "*PVR_Ven"
 	foreach aForE <- (GetKeywordForms "VendorRadio")
 		rVendor = *aForE
-		aVendorRefs = GetFormRefs rVendor
+		aVendorRefs = GetFormRefs rVendor 1
 		rVendor = aVendorRefs[0]
 		if eval rVendor.GetTalkedToPC && rVendor.GetDead == 0 && rVendor.AuxVarGetFlt "*VendorRadio" != 1
 			iVendors += 1
